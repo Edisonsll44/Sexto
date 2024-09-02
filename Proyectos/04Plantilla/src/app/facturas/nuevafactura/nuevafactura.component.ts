@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, Event } from '@angular/router';
+import { Router } from '@angular/router';
 import { IFactura } from 'src/app/Interfaces/factura';
 import { ICliente } from 'src/app/Interfaces/icliente';
 import { ClientesService } from 'src/app/Services/clientes.service';
@@ -11,7 +11,7 @@ import { FacturaService } from 'src/app/Services/factura.service';
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './nuevafactura.component.html',
-  styleUrl: './nuevafactura.component.scss'
+  styleUrls: ['./nuevafactura.component.scss']
 })
 export class NuevafacturaComponent implements OnInit {
   //variables o constantes
@@ -19,12 +19,12 @@ export class NuevafacturaComponent implements OnInit {
   listaClientes: ICliente[] = [];
   listaClientesFiltrada: ICliente[] = [];
   totalapagar: number = 0;
+
   //formgroup
   frm_factura: FormGroup;
 
-  ///////
   constructor(
-    private clietesServicios: ClientesService,
+    private clientesServicios: ClientesService,
     private facturaService: FacturaService,
     private navegacion: Router
   ) {}
@@ -38,7 +38,7 @@ export class NuevafacturaComponent implements OnInit {
       Clientes_idClientes: new FormControl('', Validators.required)
     });
 
-    this.clietesServicios.todos().subscribe({
+    this.clientesServicios.todos().subscribe({
       next: (data) => {
         this.listaClientes = data;
         this.listaClientesFiltrada = data;
@@ -65,6 +65,7 @@ export class NuevafacturaComponent implements OnInit {
       }
     });
   }
+
   calculos() {
     let sub_total = this.frm_factura.get('Sub_total')?.value;
     let iva = this.frm_factura.get('Valor_IVA')?.value;

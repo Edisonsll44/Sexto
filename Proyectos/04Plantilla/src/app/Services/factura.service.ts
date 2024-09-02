@@ -1,30 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { IFactura } from '../Interfaces/factura';
 import { Observable } from 'rxjs';
+import { BaseService } from '../Services/service-base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FacturaService {
-  apiurl = 'http://localhost/sexto/Proyectos/03MVC/controllers/factura.controller.php?op=';
+export class FacturaService extends BaseService<IFactura> {
 
-  constructor(private lector: HttpClient) {}
-
-  todos(): Observable<IFactura[]> {
-    return this.lector.get<IFactura[]>(this.apiurl + 'todos');
-  }
-
-  uno(idFactura: number): Observable<IFactura> {
-    const formData = new FormData();
-    formData.append('idFactura', idFactura.toString());
-    return this.lector.post<IFactura>(this.apiurl + 'uno', formData);
-  }
-
-  eliminar(idFactura: number): Observable<number> {
-    const formData = new FormData();
-    formData.append('idFactura', idFactura.toString());
-    return this.lector.post<number>(this.apiurl + 'eliminar', formData);
+  constructor(private http: HttpClient) {
+    super(http, 'http://localhost/sexto/Proyectos/03MVC/controllers/factura.controller.php?op=');
   }
 
   insertar(factura: IFactura): Observable<string> {
@@ -34,7 +20,7 @@ export class FacturaService {
     formData.append('Sub_total_iva', factura.Sub_total_iva.toString());
     formData.append('Valor_IVA', factura.Valor_IVA.toString());
     formData.append('Clientes_idClientes', factura.Clientes_idClientes.toString());
-    return this.lector.post<string>(this.apiurl + 'insertar', formData);
+    return this.http.post<string>(this.apiurl + 'insertar', formData);
   }
 
   actualizar(factura: IFactura): Observable<string> {
@@ -45,6 +31,6 @@ export class FacturaService {
     formData.append('Sub_total_iva', factura.Sub_total_iva.toString());
     formData.append('Valor_IVA', factura.Valor_IVA.toString());
     formData.append('Clientes_idClientes', factura.Clientes_idClientes.toString());
-    return this.lector.post<string>(this.apiurl + 'actualizar', formData);
+    return this.http.post<string>(this.apiurl + 'actualizar', formData);
   }
 }
